@@ -1,30 +1,41 @@
 import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
+
 
 @Injectable()
 export class CursosService {
 
-  constructor() { }
+	constructor(
+		private Http: Http
+	) { }
 
-  myList = [
-		{
-			name: 'Angular',
-			price: 140,
-			category: 'Front-End'
-		},
-		{
-			name: 'Express',
-			price: 180,
-			category: 'Back-End'
-		}
-	]
+	myList = []
+	private api = 'http://localhost:3000/cursos/'
 
-	createItem(newItem){
-		this.myList.push(newItem);
+	findAll() {
+		this.Http.get(this.api)
+			.subscribe(response => {
+				this.myList = response.json();				
+			})
+	}
+	
+	createItem(newItem) {
+		this.Http.post(this.api, newItem)
+			.subscribe(response => {
+				this.myList.push(response.json())
+			})		
 	}
 
-	removeItem(item){
-		var index = this.myList.indexOf(item);
-		this.myList.splice(index, 1);
+	removeItem(item) {
+		this.Http.delete(`${this.api}${item._id}`)
+			.subscribe(response => {
+				if(response.json().message === 'success'){
+					var index = this.myList.indexOf(item);
+					this.myList.splice(index, 1);
+				}
+			})		
+		
+
 	}
 
 }

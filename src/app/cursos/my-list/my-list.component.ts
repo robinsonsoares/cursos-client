@@ -14,6 +14,7 @@ export class MyListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.CursosService.findAll();
   }
 
   get myList(){

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { CursosService } from '../cursos.service';
@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './my-form.component.html',
   styleUrls: ['./my-form.component.css']
 })
-export class MyFormComponent implements OnInit {
+export class MyFormComponent implements OnInit, OnDestroy {
 
   urlSubscribe: Subscription;
   id = '';
@@ -22,9 +22,14 @@ export class MyFormComponent implements OnInit {
 
   ngOnInit() {
     this.urlSubscribe = this.ActivatedRoute.params.subscribe((params: any) => {
+      this.id = params['id'];
       this.getItem(params['id']);
       
     })
+  }
+
+  ngOnDestroy(){
+    this.urlSubscribe.unsubscribe();
   }
 
   newItem = {name: '', price: 0, category: ''}
@@ -36,7 +41,7 @@ export class MyFormComponent implements OnInit {
   
   getItem(id){
     if(id){
-      this.newItem = this.CursosService.myList.find(item => item.name === id);
+      this.newItem = this.CursosService.myList.find(item => item._id === id);
     }else{
       this.newItem = {name: '', price: 0, category: ''};
     }
