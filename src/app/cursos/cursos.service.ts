@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers, RequestOptions } from '@angular/http';
 
+import { AuthenticationService } from '../authentication.service';
 
 @Injectable()
 export class CursosService {
 
 	constructor(
-		private Http: Http
+		private Http: Http,
+		private AuthenticationService: AuthenticationService
+		
 	) { }
 
 	myList = []
@@ -20,7 +23,13 @@ export class CursosService {
 	}
 	
 	createItem(newItem) {
-		this.Http.post(this.api, newItem)
+		var options = new RequestOptions({
+			headers: new Headers({
+				'Authorization' : 'JWT ' + this.AuthenticationService.token
+			})
+		})
+
+		this.Http.post(this.api, newItem, options)
 			.subscribe(response => {
 				this.myList.push(response.json())
 			})		

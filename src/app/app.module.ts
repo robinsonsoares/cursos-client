@@ -6,10 +6,14 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { CursosModule } from './cursos/cursos.module';
 import { AppRoutingModule } from './app.routing.module';
+import { AuthenticationService } from './authentication.service';
+import { AuthenticationGuard } from './authentication.guard';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -18,7 +22,7 @@ import { AppRoutingModule } from './app.routing.module';
     AppRoutingModule,
     CursosModule
   ],
-  providers: [],
+  providers: [AuthenticationGuard,AuthenticationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
